@@ -1,0 +1,59 @@
+/* Referencias a etiquetas: Son globales */
+*{
+	margin: 0;
+	padding: 0;
+}
+body{
+	font-family: sans-serif;
+	text-align: center;
+}
+header{
+	padding: 40px;
+	background-color: #003050;
+	color: white;
+}
+main{
+	padding: 25px;
+	color: #6C6170;
+}
+footer{
+	padding: 20px;
+	color:  #003050;
+	font-size: 20px;
+}
+
+h1 {
+	padding: 40px;
+	font-size: 40px;
+}
+h2{
+	padding: 20px;
+}
+a{
+	text-decoration: none;
+	color: white;
+}
+a:hover{
+	color: #00A5B6;
+}
+ul{
+	display: table;
+	margin: 0 auto;
+	text-align: left;
+}
+
+/* Referencias por ID: Son especificas */
+#pem {
+	color:  yellow;
+}
+#ubic {
+	color:  orange;
+}
+
+/* Referencias por CLASS: Son de grupo */
+.subtitulo {
+	color:  #00A5B6;
+}
+.menu{
+	font-size: 20px;
+}
