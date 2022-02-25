@@ -56,32 +56,18 @@ ctx.fillStyle = 'black';
 ctx.fillRect(250, 100, 750, 400);
 */
 
-let ave1 = new Image();
-ave1.src = 'img/ave-volando.png';
-ave1.onload = function () {
-	ctx.drawImage(ave1, 0, 0, 133, 100);
+let ave = new Image();
+let cerdito = new Image();
+
+ave.src = 'img/ave-volando.png';
+cerdito.src = 'img/cerdito.png';
+
+ave.onload = function () {
+	/* ave, posx, posy, ancho, alto */
+	ctx.drawImage(ave, 100, 300, 133, 100);
 };
 
-let ave2 = new Image();
-ave2.src = 'img/ave-volando.png';
-ave2.onload = function () {
-	ctx.drawImage(ave2, 100, 100, 133, 100);
-};
-
-let ave3 = new Image();
-ave3.src = 'img/ave-volando.png';
-ave3.onload = function () {
-	ctx.drawImage(ave3, 200, 200, 133, 100);
-};
-
-let ave4 = new Image();
-ave4.src = 'img/ave-volando.png';
-ave4.onload = function () {
-	ctx.drawImage(ave4, 300, 300, 133, 100);
-};
-
-let ave5 = new Image();
-ave5.src = 'img/ave-volando.png';
-ave5.onload = function () {
-	ctx.drawImage(ave5, 400, 400, 133, 100);
+cerdito.onload = function () {
+	/* cerdito, posx, posy, ancho, alto */
+	ctx.drawImage(cerdito, 800, 300, 103, 100);
 };
