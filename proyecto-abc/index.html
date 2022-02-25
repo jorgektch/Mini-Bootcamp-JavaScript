@@ -22,16 +22,22 @@
 	letras en palabras
 	-->
 	<header>
-		<h1>
-			ABC
-		</h1>
-		<p>Ayudamos a los niños a identificar letras en palabras</p>
+		<div class="contenedor">
+			<h1 id = "titulo">
+				ABC
+			</h1>
+			<p id = "descripcion">Ayudamos a los niños a identificar letras en palabras</p>
+		</div>
 	</header>
 	<main>
-		<canvas id="canvas" width="1000" height="500" style="border: 1px solid #003050"></canvas>
+		<div class="contenedor">
+			<canvas id="lienzo" width="1000" height="500"></canvas>
+		</div>
 	</main>
 	<footer>
-		<p>Hecho con <3 por <a href="https://github.com/JorgeKtch" target="_blank">Jorge Ktch</a></p>
+		<div class="contenedor">
+			<p id = "copy">Hecho con <3 por <a href="https://github.com/JorgeKtch" target="_blank">Jorge Ktch</a></p>
+		</div>
 	</footer>
 	<script type="text/javascript" src="js/codigo.js"></script>
 </body>

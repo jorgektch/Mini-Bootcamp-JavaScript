@@ -1,0 +1,33 @@
+body {
+	font-family: Verdana;
+	margin:  0;
+}
+
+a {
+	color: #003050;
+	text-decoration: underline;
+}
+a:hover {
+	color:  #00A5B6;
+}
+
+.contenedor {
+	text-align: center;
+}
+
+#lienzo {
+	border: 1px solid black;
+	background: url(../img/fondo.png);
+}
+
+#titulo {
+	color: #00A5B6;
+}
+
+#descripcion {
+	color:  grey;
+}
+
+#copy {
+	color: #003050;
+}
