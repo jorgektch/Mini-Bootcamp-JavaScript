@@ -34,6 +34,7 @@ reloj.onload = function () {
 	/* ave, posx, posy, ancho, alto */
 	ctx.drawImage(reloj, 420, 27, 30, 30);
 };
+
 /*
 900 
 813 27
