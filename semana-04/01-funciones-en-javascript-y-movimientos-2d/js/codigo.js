@@ -1,30 +1,26 @@
-/* const permite declarar una variable que no se puede mofidicar */
-/* Guardo el canvas en la variable c */
-const c = document.querySelector("#lienzo");
-const ctx = c.getContext("2d");
-
 // Contexto previo a funciones en JavaScript
 let ladoCuadrado1 = 4;
 let areaCuadrado1 = ladoCuadrado1*ladoCuadrado1;
-console.log(areaCuadrado1);
+/* console.log(areaCuadrado1); */
 
 let ladoCuadrado2 = 7;
 let areaCuadrado2 = ladoCuadrado2*ladoCuadrado2;
-console.log(areaCuadrado2);
+/* console.log(areaCuadrado2); */
 
 let ladoCuadrado3 = 3;
 let areaCuadrado3 = ladoCuadrado3*ladoCuadrado3;
-console.log(areaCuadrado3);
+/* console.log(areaCuadrado3); */
 
 // Funciones en JavaScript
 function areaCuadrado(lado){
 	let area = lado*lado;
 	return area;
 }
-
+/* 
 console.log(areaCuadrado(4));
 console.log(areaCuadrado(7));
 console.log(areaCuadrado(3));
+*/
 
 /*
 Reto 01:
@@ -40,8 +36,10 @@ function areaRectangulo(base, altura){
 	let area = base*altura;
 	return area;
 }
+/* 
 console.log(areaTriangulo(3,4));
 console.log(areaRectangulo(3,4));
+*/
 
 /*
 Reto 02:
@@ -61,7 +59,10 @@ function puntoInterior(x,y,w,h){
 	}
 	return estaDentro;
 }
+/* 
 console.log(puntoInterior(1000,1000,1000,500));
+*/
+
 /*
 Reto 03:
 Dados w,h que son dimensiones de una lienzo
@@ -92,5 +93,56 @@ function figuraInterior(x,y,wp,hp,w,h){
 	}
 	return estaDentro;
 }
-
+/* 
 console.log(figuraInterior(500,250,1000,500,1000,500));
+*/
+
+
+/* Movimiento en 2D (Animaciones) */
+
+/* const permite declarar una variable que no se puede mofidicar */
+/* Guardo el canvas en la variable c */
+const c = document.querySelector("#lienzo");
+const ctx = c.getContext("2d");
+
+// Imagenes
+let fondo = new Image();
+let personaje = new Image();
+fondo.src = "img/fondo.png";
+personaje.src = "img/ave-volando.png";
+
+// Variables de posicion
+let fondo_x = 0;
+let fondo_y = 0;
+let personaje_x = 100;
+let personaje_y = 100;
+
+// Variables de dimension
+let fondo_w = 1000;
+let fondo_h = 500;
+let personaje_w = 133;
+let personaje_h = 100;
+
+// Variables de movimiento
+let personaje_dist_x = 2; /* Avanza una distancia determinada */
+let personaje_sent_x = 1; /* Avanza en un sentido determinado */
+
+function dibujar(){
+	ctx.drawImage(fondo, fondo_x, fondo_y, fondo_w, fondo_h);
+	personaje_x = personaje_x+personaje_dist_x*personaje_sent_x;
+	if(figuraInterior(personaje_x,personaje_y,personaje_w,personaje_h,fondo_w,fondo_h) == false){
+		personaje_sent_x = -personaje_sent_x;
+	}
+	let min = -10;
+	let max = 10;
+	personaje_y = personaje_y+Math.random()*(max-min)+min;
+	/*
+	while(figuraInterior(personaje_x,personaje_y,personaje_w,personaje_h,fondo_w,fondo_h) == false){
+		personaje_y = personaje_y+Math.random()*(max-min)+min;
+	}
+	*/
+	ctx.drawImage(personaje, personaje_x, personaje_y, personaje_w, personaje_h);
+	requestAnimationFrame(dibujar);
+}
+
+dibujar(); // Invocando a la funcion dibujar()
