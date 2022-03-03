@@ -1,0 +1,8 @@
+.contenedor {
+	text-align: center;
+}
+
+#lienzo {
+	border: 1px solid black;
+	/* background:  url(../img/fondo.png); */
+}
