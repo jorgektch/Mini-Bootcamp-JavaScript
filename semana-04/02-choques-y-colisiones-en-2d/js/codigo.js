@@ -33,8 +33,10 @@ function verificarInterseccion1D(li1, ls1, li2, ls2){
 	}
 }
 
+/*
 console.log(verificarInterseccion1D(-2,1,0,3));
 console.log(verificarInterseccion1D(0,3,4,7));
+*/
 
 /*
 Se tienen las coordenadas y dimensiones de
@@ -82,5 +84,42 @@ function verificarInterseccion2D(xp,yp,wp,hp,xe,ye,we,he) {
 	}
 }
 
+/*
 console.log(verificarInterseccion2D(10,10,20,30,40,40,20,30));
 console.log(verificarInterseccion2D(10,10,20,30,30,40,20,30));
+*/
+
+function verificarPuntoEnIntervalo(li, ls, x){
+	/* Se verifica si un punto x esta en un intervalo de li a ls */
+	if(li<=x && x<=ls){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+console.log(verificarPuntoEnIntervalo(-1,3,3));
+
+function verificarInserseccionIntervalos(li1, ls1, li2, ls2){
+	/* Se verifica dos intervalos de li1 a ls1 y li2 a ls2 se intersectan */
+	if(verificarPuntoEnIntervalo(li1, ls1, li2) || verificarPuntoEnIntervalo(li1, ls1, ls2)){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+console.log(verificarInserseccionIntervalos(-3,-1,-1,3));
+
+function verificarPuntoEnRectangulo(xp,yp,w,h,x,y){
+	/* Se verifica que un punto x, y este dentro o no de un rectangulo
+	de vertice xp,yp y dimensiones w y h */
+	if(verificarPuntoEnIntervalo(xp,xp+w,x) &&
+	   verificarPuntoEnIntervalo(yp,yp+h,y)){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+console.log(verificarPuntoEnRectangulo(10,10,30,20,50,20));
