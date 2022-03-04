@@ -102,7 +102,8 @@ console.log(verificarPuntoEnIntervalo(-1,3,3));
 
 function verificarInserseccionIntervalos(li1, ls1, li2, ls2){
 	/* Se verifica dos intervalos de li1 a ls1 y li2 a ls2 se intersectan */
-	if(verificarPuntoEnIntervalo(li1, ls1, li2) || verificarPuntoEnIntervalo(li1, ls1, ls2)){
+	if(verificarPuntoEnIntervalo(li1, ls1, li2) ||
+	   verificarPuntoEnIntervalo(li1, ls1, ls2)){
 		return true;
 	}else{
 		return false;
@@ -123,3 +124,14 @@ function verificarPuntoEnRectangulo(xp,yp,w,h,x,y){
 }
 
 console.log(verificarPuntoEnRectangulo(10,10,30,20,50,20));
+
+function verificarInterseccionRectangulos(xp,yp,wp,hp,xe,ye,we,he){
+	if(verificarInserseccionIntervalos(xp,xp+wp,xe,xe+we) &&
+	   verificarInserseccionIntervalos(yp,yp+hp,ye,ye+he)){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+console.log(verificarInterseccionRectangulos(20,10,30,30,40,40,10,10));
