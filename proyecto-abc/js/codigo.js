@@ -74,6 +74,11 @@ corazon2.src = 'img/corazon.png';
 corazon3.src = 'img/corazon.png';
 reloj.src = 'img/reloj.png';
 
+// Variables del juego
+let vidas = 5;
+let tiempo = 25;
+let puntos = 0;
+
 // Variables de posicion
 let fondo_x = 0;
 let fondo_y = 0;
@@ -133,13 +138,19 @@ function dibujar(){
 	if(verificarInterseccionRectangulos(personaje_x, personaje_y, personaje_w, personaje_h,
 										enemigo_x, enemigo_y, enemigo_w, enemigo_h) == true){
 		personaje_dir = -personaje_dir;
+		vidas = vidas-1;
 		console.log("Hubo una colision");
 	}
-	
+
 	// Datos del juego
+	for(let i=0;i<vidas;i++){
+		ctx.drawImage(corazon1, 35+40*i, 33, 30, 27);
+	}
+	/*
 	ctx.drawImage(corazon1, 35, 33, 30, 27);
 	ctx.drawImage(corazon2, 70, 33, 30, 27);
 	ctx.drawImage(corazon3, 105, 33, 30, 27);
+	*/
 	ctx.drawImage(reloj, 420, 27, 30, 30);
 	ctx.fillText("25s", 460, 50);
 	ctx.fillText("Puntos: 100pts", 800, 50);
