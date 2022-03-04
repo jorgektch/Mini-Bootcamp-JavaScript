@@ -15,11 +15,6 @@ a:hover {
 	text-align: center;
 }
 
-#lienzo {
-	border: 1px solid black;
-	background: url(../img/fondo.png);
-}
-
 #titulo {
 	color: #00A5B6;
 }
