@@ -22,9 +22,31 @@ function verificarInserseccionIntervalos(li1, ls1, li2, ls2){
 	}
 }
 
+function verificarPuntoEnRectangulo(xp,yp,w,h,x,y){
+	/* Se verifica que un punto x, y este dentro o no de un rectangulo
+	de vertice xp,yp y dimensiones w y h */
+	if(verificarPuntoEnIntervalo(xp,xp+w,x) &&
+	   verificarPuntoEnIntervalo(yp,yp+h,y)){
+		return true;
+	}else{
+		return false;
+	}
+}
+
 function verificarInterseccionRectangulos(xp,yp,wp,hp,xe,ye,we,he){
 	if(verificarInserseccionIntervalos(xp,xp+wp,xe,xe+we) &&
 	   verificarInserseccionIntervalos(yp,yp+hp,ye,ye+he)){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+function verificarRectanguloDentroDeOtro(xc,yc,wc,hc,xp,yp,wp,hp){
+	if(verificarPuntoEnRectangulo(xc,yc,wc,hc,xp,yp) &&
+	   verificarPuntoEnRectangulo(xc,yc,wc,hc,xp+wp,yp) &&
+	   verificarPuntoEnRectangulo(xc,yc,wc,hc,xp,yp+hp) &&
+	   verificarPuntoEnRectangulo(xc,yc,wc,hc,xp+wp,yp+hp)){
 		return true;
 	}else{
 		return false;
@@ -69,9 +91,8 @@ let enemigo_w = 100;
 let enemigo_h = 100;
 
 // Variables de movimiento
-let desplazamiento = 10;
-let personaje_dist_x = 2; /* Avanza una distancia determinada */
-let personaje_sent_x = 1; /* Avanza en un sentido determinado */
+let personaje_desp = 10;
+let personaje_dir = 0; /* Avanza en una direccion determinado. 0 por defecto */
 
 
 // Listener de eventos que espera una accion para lanzar una funcion
@@ -80,22 +101,40 @@ document.addEventListener("keydown", moverPersonaje);
 function moverPersonaje(){
 	// keyCode = {37 left, 38 up, 39 rigth, 40 down}
 	if(event.keyCode == 37){
-		personaje_x = personaje_x - desplazamiento;
+		// personaje_x = personaje_x - personaje_desp;
+		personaje_dir = -1;
 	}
 	if(event.keyCode == 38){
-		personaje_y = personaje_y - desplazamiento;
+		personaje_y = personaje_y - personaje_desp;
 	}
 	if(event.keyCode == 39){
-		personaje_x = personaje_x + desplazamiento;
+		// personaje_x = personaje_x + personaje_desp;
+		personaje_dir = 1;
 	}
 	if(event.keyCode == 40){
-		personaje_y = personaje_y + desplazamiento;
+		personaje_y = personaje_y + personaje_desp;
 	}
 }
 
 function dibujar(){
 	// Fondo del juego
 	ctx.drawImage(fondo, fondo_x, fondo_y, fondo_w, fondo_h);
+	
+	// Control de movimiento 2d dentro del canvas
+	if(verificarRectanguloDentroDeOtro(fondo_x, fondo_y, fondo_w, fondo_h,
+		                               personaje_x+personaje_desp*personaje_dir, personaje_y, personaje_w, personaje_h) == true){
+		personaje_x = personaje_x+personaje_desp*personaje_dir;
+	}else{
+		// Cambio de direccion
+		personaje_dir = -personaje_dir;
+	}
+
+	// Verificar colision
+	if(verificarInterseccionRectangulos(personaje_x, personaje_y, personaje_w, personaje_h,
+										enemigo_x, enemigo_y, enemigo_w, enemigo_h) == true){
+		personaje_dir = -personaje_dir;
+		console.log("Hubo una colision");
+	}
 	
 	// Datos del juego
 	ctx.drawImage(corazon1, 35, 33, 30, 27);
