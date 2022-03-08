@@ -128,12 +128,7 @@ function moverPersonajeY(){
 	}
 }
 
-
-function dibujar(){
-	// Fondo del juego
-	ctx.drawImage(fondo, fondo_x, fondo_y, fondo_w, fondo_h);
-	
-	// Control de movimiento 2d dentro del canvas
+function moverPersonajeX(){
 	if(verificarRectanguloDentroDeOtro(fondo_x, fondo_y, fondo_w, fondo_h,
 		                               personaje_x+personaje_veloc_x*1, personaje_y, personaje_w, personaje_h) == true){
 		personaje_x = personaje_x+personaje_veloc_x*1;
@@ -141,16 +136,26 @@ function dibujar(){
 		// Cambio de direccion
 		personaje_veloc_x = -personaje_veloc_x;
 	}
+}
 
-	moverPersonajeY(); // Movimiento en Y
-
-	// Verificar colision
+function verificarColision(){
 	if(verificarInterseccionRectangulos(personaje_x, personaje_y, personaje_w, personaje_h,
 										enemigo_x, enemigo_y, enemigo_w, enemigo_h) == true){
 		personaje_veloc_x = -personaje_veloc_x;
 		vidas = vidas-1;
 		console.log("Hubo una colision");
 	}
+}
+
+function dibujar(){
+	// Fondo del juego
+	ctx.drawImage(fondo, fondo_x, fondo_y, fondo_w, fondo_h);
+	
+
+	moverPersonajeX(); // Movimiento en X
+	moverPersonajeY(); // Movimiento en Y
+
+	verificarColision(); // Verificar colision
 
 	// Datos del juego
 	for(let i=0;i<vidas;i++){
