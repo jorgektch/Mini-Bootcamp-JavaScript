@@ -60,7 +60,6 @@ ctx.fillStyle = "#003050"
 // Imagenes
 let fondo = new Image();
 let personaje = new Image();
-let enemigo = new Image();
 let corazon1 = new Image();
 let corazon2 = new Image();
 let corazon3 = new Image();
@@ -68,7 +67,6 @@ let reloj = new Image();
 
 fondo.src = "img/fondo.png";
 personaje.src = "img/personaje.png";
-enemigo.src = "img/casa.png";
 corazon1.src = 'img/corazon.png';
 corazon2.src = 'img/corazon.png';
 corazon3.src = 'img/corazon.png';
@@ -84,8 +82,11 @@ let fondo_x = 0;
 let fondo_y = 0;
 let personaje_x = 100;
 let personaje_y = 332;
-let enemigo_x = 500;
-let enemigo_y = 332;
+
+let enemigos_cant = 5;
+let enemigos_img = [];
+let enemigos_x = [] // Posicion en x
+let enemigos_y = 332;
 
 // Variables de dimension
 let fondo_w = 1000;
@@ -117,6 +118,30 @@ function capturarMovimiento(){
 	}
 }
 
+function inicializarEnemigos(){
+	let x_min = 250, x_max = 1000;
+	for(let i=0; i<enemigos_cant; i++){
+		let enemigo = new Image()
+		let max = 1, min = 0;
+		let aleatorio = Math.floor(Math.random()*(max-min+1)+min);
+		if(aleatorio == 0){
+			enemigo.src = 'img/palabras/casa.png';
+		}else if(aleatorio == 1){
+			enemigo.src = 'img/palabras/perro.png';
+		}
+		enemigos_img.push(enemigo);
+		enemigos_x.push(250+i*(x_max-x_min)/enemigos_cant);
+		
+	}
+}
+
+function dibujarEnemigos(){
+	for(let i=0; i<enemigos_cant; i++){
+		//console.log(i);
+		ctx.drawImage(enemigos_img[i], enemigos_x[i], enemigos_y, enemigo_w, enemigo_h);
+	}
+}
+
 function moverPersonajeY(){
 	if(personaje_y - personaje_veloc_y*1 < 332){ // Si valor de y esta por encima del valor base: 332
 		personaje_y = personaje_y - personaje_veloc_y*1; // Se actualiza la posicion en Y
@@ -139,23 +164,25 @@ function moverPersonajeX(){
 }
 
 function verificarColision(){
+	/*
 	if(verificarInterseccionRectangulos(personaje_x, personaje_y, personaje_w, personaje_h,
 										enemigo_x, enemigo_y, enemigo_w, enemigo_h) == true){
 		personaje_veloc_x = -personaje_veloc_x;
 		vidas = vidas-1;
 		console.log("Hubo una colision");
 	}
+	*/
 }
 
 function dibujar(){
 	// Fondo del juego
 	ctx.drawImage(fondo, fondo_x, fondo_y, fondo_w, fondo_h);
+	dibujarEnemigos();
 	
-
 	moverPersonajeX(); // Movimiento en X
 	moverPersonajeY(); // Movimiento en Y
 
-	verificarColision(); // Verificar colision
+	//verificarColision(); // Verificar colision
 
 	// Datos del juego
 	for(let i=0;i<vidas;i++){
@@ -172,9 +199,10 @@ function dibujar(){
 
 	// Elementos del juego
 	ctx.drawImage(personaje, personaje_x, personaje_y, personaje_w, personaje_h);
-	ctx.drawImage(enemigo, enemigo_x, enemigo_y, enemigo_w, enemigo_h);
+	
 	requestAnimationFrame(dibujar);
 }
 
+inicializarEnemigos();
 dibujar(); // Invocando a la funcion dibujar()
 
