@@ -72,6 +72,13 @@ corazon2.src = 'img/corazon.png';
 corazon3.src = 'img/corazon.png';
 reloj.src = 'img/reloj.png';
 
+// Audio
+let sonido_fondo = new Audio();
+let sonido_movimiento = new Audio();
+
+sonido_fondo.src = 'media/soundtrack.mp3';
+sonido_movimiento.src = 'media/movimiento.mp3';
+
 // Variables del juego
 let vidas = 5;
 let tiempo = 25;
@@ -83,18 +90,19 @@ let fondo_y = 0;
 let personaje_x = 100;
 let personaje_y = 332;
 
-let enemigos_cant = 5;
-let enemigos_img = [];
-let enemigos_x = [] // Posicion en x
-let enemigos_y = 332;
+let otros_cant = 5;
+let otros_img = [];
+let otros_x = [] // Posicion en x
+let otros_y = 332;
+let otros_enemigos = [];
 
 // Variables de dimension
 let fondo_w = 1000;
 let fondo_h = 500;
 let personaje_w = 100;
 let personaje_h = 100;
-let enemigo_w = 100;
-let enemigo_h = 100;
+let otro_w = 100;
+let otro_h = 100;
 
 // Variables de movimiento
 let personaje_veloc_x = 0;
@@ -108,37 +116,51 @@ function capturarMovimiento(){
 	// keyCode = {37 left, 38 up, 39 rigth, 40 down}
 	if(event.keyCode == 37){
 		personaje_veloc_x = -10; // Si se presiona el boton izq: la velocidad en x se vuelve negativa
+		sonido_movimiento.pause();
+		sonido_movimiento.currentTime = 0;
+		sonido_movimiento.play();
 	}
 	if(event.keyCode == 38){
 		personaje_veloc_y = 10; // Si se presiona el boton arriba: la velocidad en y se vuelve negativa (para que suba)
 		salto_iniciado = true; // Se indica que hay un salto que se ha iniciado
+		sonido_movimiento.pause();
+		sonido_movimiento.currentTime = 0;
+		sonido_movimiento.play();
 	}
 	if(event.keyCode == 39){
 		personaje_veloc_x = 10; // Si se presiona el boton der: la velocidad en x se vuelve positiva
+		sonido_movimiento.pause();
+		sonido_movimiento.currentTime = 0;
+		sonido_movimiento.play();
 	}
 }
 
-function inicializarEnemigos(){
+function inicializarOtros(){
 	let x_min = 250, x_max = 1000;
-	for(let i=0; i<enemigos_cant; i++){
-		let enemigo = new Image()
+	for(let i=0; i<otros_cant; i++){
+		let otro = new Image()
 		let max = 1, min = 0;
 		let aleatorio = Math.floor(Math.random()*(max-min+1)+min);
 		if(aleatorio == 0){
-			enemigo.src = 'img/palabras/casa.png';
+			otro.src = 'img/palabras/casa.png';
+			otros_tipo.push(true);
 		}else if(aleatorio == 1){
-			enemigo.src = 'img/palabras/perro.png';
+			otro.src = 'img/palabras/perro.png';
+			otros_tipo.push(false);
 		}
-		enemigos_img.push(enemigo);
-		enemigos_x.push(250+i*(x_max-x_min)/enemigos_cant);
+		otros_img.push(otro);
+		otros_x.push(250+i*(x_max-x_min)/otros_cant);
 		
 	}
 }
 
-function dibujarEnemigos(){
-	for(let i=0; i<enemigos_cant; i++){
+function dibujarPersonajes(){
+	// Personaje principal
+	ctx.drawImage(personaje, personaje_x, personaje_y, personaje_w, personaje_h);
+	// otros
+	for(let i=0; i<otros_cant; i++){
 		//console.log(i);
-		ctx.drawImage(enemigos_img[i], enemigos_x[i], enemigos_y, enemigo_w, enemigo_h);
+		ctx.drawImage(otros_img[i], otros_x[i], otros_y, otro_w, otro_h);
 	}
 }
 
@@ -166,7 +188,7 @@ function moverPersonajeX(){
 function verificarColision(){
 	/*
 	if(verificarInterseccionRectangulos(personaje_x, personaje_y, personaje_w, personaje_h,
-										enemigo_x, enemigo_y, enemigo_w, enemigo_h) == true){
+										otro_x, otro_y, otro_w, otro_h) == true){
 		personaje_veloc_x = -personaje_veloc_x;
 		vidas = vidas-1;
 		console.log("Hubo una colision");
@@ -174,35 +196,36 @@ function verificarColision(){
 	*/
 }
 
-function dibujar(){
-	// Fondo del juego
+function dibujarDatos(){
+	// Fondo
 	ctx.drawImage(fondo, fondo_x, fondo_y, fondo_w, fondo_h);
-	dibujarEnemigos();
-	
+	// Vidas
+	for(let i=0;i<vidas;i++){
+		ctx.drawImage(corazon1, 35+40*i, 33, 30, 27);
+	}
+	// Tiempo
+	ctx.drawImage(reloj, 420, 27, 30, 30);
+	ctx.fillText("25s", 460, 50);
+	// Puntos
+	ctx.fillText("Puntos: 100pts", 800, 50);
+}
+
+function dibujar(){
 	moverPersonajeX(); // Movimiento en X
 	moverPersonajeY(); // Movimiento en Y
 
 	//verificarColision(); // Verificar colision
 
 	// Datos del juego
-	for(let i=0;i<vidas;i++){
-		ctx.drawImage(corazon1, 35+40*i, 33, 30, 27);
-	}
-	/*
-	ctx.drawImage(corazon1, 35, 33, 30, 27);
-	ctx.drawImage(corazon2, 70, 33, 30, 27);
-	ctx.drawImage(corazon3, 105, 33, 30, 27);
-	*/
-	ctx.drawImage(reloj, 420, 27, 30, 30);
-	ctx.fillText("25s", 460, 50);
-	ctx.fillText("Puntos: 100pts", 800, 50);
+	dibujarDatos();
 
-	// Elementos del juego
-	ctx.drawImage(personaje, personaje_x, personaje_y, personaje_w, personaje_h);
+	// Personajes
+	dibujarPersonajes();
 	
 	requestAnimationFrame(dibujar);
 }
 
-inicializarEnemigos();
+inicializarOtros();
+sonido_fondo.play(); // En revision
 dibujar(); // Invocando a la funcion dibujar()
 
