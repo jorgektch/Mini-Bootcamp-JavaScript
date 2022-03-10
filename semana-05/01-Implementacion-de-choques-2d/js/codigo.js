@@ -194,8 +194,12 @@ function verificarColision(){
 			if(verificarInterseccionRectangulos(principal_x, principal_y, personaje_w, personaje_h,
 												otros_x[i], otros_y, otro_w, otro_h) == true){
 				principal_veloc_x = -principal_veloc_x;
-				vidas = vidas-1;
 				otros_vivo[i] = false;
+				if(otros_bueno[i] == true){ // Si el otro personaje es bueno, suma puntos
+					puntos = puntos + 10;
+				}else{ // Si el otro personaje es malo, pierde vidas
+					vidas = vidas-1;
+				}
 			}
 		}
 	}
@@ -212,7 +216,7 @@ function dibujarDatos(){
 	ctx.drawImage(reloj, 420, 27, 30, 30);
 	ctx.fillText("25s", 460, 50);
 	// Puntos
-	ctx.fillText("Puntos: 100pts", 800, 50);
+	ctx.fillText("Puntos: "+puntos.toString()+"pts", 800, 50);
 }
 
 function dibujar(){
