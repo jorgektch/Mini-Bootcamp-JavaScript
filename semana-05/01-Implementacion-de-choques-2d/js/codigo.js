@@ -87,14 +87,15 @@ let puntos = 0;
 // Variables de posicion
 let fondo_x = 0;
 let fondo_y = 0;
-let personaje_x = 100;
-let personaje_y = 332;
+let principal_x = 100;
+let principal_y = 332;
 
 let otros_cant = 5;
 let otros_img = [];
 let otros_x = [] // Posicion en x
 let otros_y = 332;
-let otros_enemigos = [];
+let otros_bueno = []; // Si es bueno va true, en caso contrario va false
+let otros_vivo = []; // Si esta vivo va true, en caso contrario va false
 
 // Variables de dimension
 let fondo_w = 1000;
@@ -105,8 +106,8 @@ let otro_w = 100;
 let otro_h = 100;
 
 // Variables de movimiento
-let personaje_veloc_x = 0;
-let personaje_veloc_y = 0;
+let principal_veloc_x = 0;
+let principal_veloc_y = 0;
 let aceleracion_gravedad = 0.5;
 let salto_iniciado = false;
 // Listener de eventos que espera una accion para lanzar una funcion
@@ -115,20 +116,20 @@ document.addEventListener("keydown", capturarMovimiento);
 function capturarMovimiento(){
 	// keyCode = {37 left, 38 up, 39 rigth, 40 down}
 	if(event.keyCode == 37){
-		personaje_veloc_x = -10; // Si se presiona el boton izq: la velocidad en x se vuelve negativa
+		principal_veloc_x = -10; // Si se presiona el boton izq: la velocidad en x se vuelve negativa
 		sonido_movimiento.pause();
 		sonido_movimiento.currentTime = 0;
 		sonido_movimiento.play();
 	}
 	if(event.keyCode == 38){
-		personaje_veloc_y = 10; // Si se presiona el boton arriba: la velocidad en y se vuelve negativa (para que suba)
+		principal_veloc_y = 10; // Si se presiona el boton arriba: la velocidad en y se vuelve negativa (para que suba)
 		salto_iniciado = true; // Se indica que hay un salto que se ha iniciado
 		sonido_movimiento.pause();
 		sonido_movimiento.currentTime = 0;
 		sonido_movimiento.play();
 	}
 	if(event.keyCode == 39){
-		personaje_veloc_x = 10; // Si se presiona el boton der: la velocidad en x se vuelve positiva
+		principal_veloc_x = 10; // Si se presiona el boton der: la velocidad en x se vuelve positiva
 		sonido_movimiento.pause();
 		sonido_movimiento.currentTime = 0;
 		sonido_movimiento.play();
@@ -143,57 +144,61 @@ function inicializarOtros(){
 		let aleatorio = Math.floor(Math.random()*(max-min+1)+min);
 		if(aleatorio == 0){
 			otro.src = 'img/palabras/casa.png';
-			otros_tipo.push(true);
+			otros_bueno.push(true);
 		}else if(aleatorio == 1){
 			otro.src = 'img/palabras/perro.png';
-			otros_tipo.push(false);
+			otros_bueno.push(false);
 		}
 		otros_img.push(otro);
 		otros_x.push(250+i*(x_max-x_min)/otros_cant);
-		
+		otros_vivo.push(true);
 	}
 }
 
 function dibujarPersonajes(){
 	// Personaje principal
-	ctx.drawImage(personaje, personaje_x, personaje_y, personaje_w, personaje_h);
-	// otros
+	ctx.drawImage(personaje, principal_x, principal_y, personaje_w, personaje_h);
+	// Personajes otros
 	for(let i=0; i<otros_cant; i++){
 		//console.log(i);
-		ctx.drawImage(otros_img[i], otros_x[i], otros_y, otro_w, otro_h);
+		if(otros_vivo[i] == true){
+			ctx.drawImage(otros_img[i], otros_x[i], otros_y, otro_w, otro_h);
+		}
 	}
 }
 
 function moverPersonajeY(){
-	if(personaje_y - personaje_veloc_y*1 < 332){ // Si valor de y esta por encima del valor base: 332
-		personaje_y = personaje_y - personaje_veloc_y*1; // Se actualiza la posicion en Y
+	if(principal_y - principal_veloc_y*1 < 332){ // Si valor de y esta por encima del valor base: 332
+		principal_y = principal_y - principal_veloc_y*1; // Se actualiza la posicion en Y
 		if(salto_iniciado == true){
-			personaje_veloc_y = personaje_veloc_y-aceleracion_gravedad*1; // Se actualiza la velocidad (cambia)
+			principal_veloc_y = principal_veloc_y-aceleracion_gravedad*1; // Se actualiza la velocidad (cambia)
 		}
 	}else{
-		personaje_y = 332;
+		principal_y = 332;
 	}
 }
 
 function moverPersonajeX(){
 	if(verificarRectanguloDentroDeOtro(fondo_x, fondo_y, fondo_w, fondo_h,
-		                               personaje_x+personaje_veloc_x*1, personaje_y, personaje_w, personaje_h) == true){
-		personaje_x = personaje_x+personaje_veloc_x*1;
+		                               principal_x+principal_veloc_x*1, principal_y, personaje_w, personaje_h) == true){
+		principal_x = principal_x+principal_veloc_x*1;
 	}else{
 		// Cambio de direccion
-		personaje_veloc_x = -personaje_veloc_x;
+		principal_veloc_x = -principal_veloc_x;
 	}
 }
 
 function verificarColision(){
-	/*
-	if(verificarInterseccionRectangulos(personaje_x, personaje_y, personaje_w, personaje_h,
-										otro_x, otro_y, otro_w, otro_h) == true){
-		personaje_veloc_x = -personaje_veloc_x;
-		vidas = vidas-1;
-		console.log("Hubo una colision");
+	for(let i=0; i<otros_cant; i++){ // Se recorren todos los "otros" personajes
+		if(otros_vivo[i] == true){ // Solo se van a verificar choques con personajes vivos
+			if(verificarInterseccionRectangulos(principal_x, principal_y, personaje_w, personaje_h,
+												otros_x[i], otros_y, otro_w, otro_h) == true){
+				principal_veloc_x = -principal_veloc_x;
+				vidas = vidas-1;
+				otros_vivo[i] = false;
+			}
+		}
 	}
-	*/
 }
 
 function dibujarDatos(){
@@ -214,18 +219,15 @@ function dibujar(){
 	moverPersonajeX(); // Movimiento en X
 	moverPersonajeY(); // Movimiento en Y
 
-	//verificarColision(); // Verificar colision
+	verificarColision(); // Verificar colision
 
-	// Datos del juego
-	dibujarDatos();
-
-	// Personajes
-	dibujarPersonajes();
+	dibujarDatos(); // Datos del juego
+	dibujarPersonajes(); // Personajes
 	
 	requestAnimationFrame(dibujar);
 }
 
 inicializarOtros();
-sonido_fondo.play(); // En revision
+//sonido_fondo.play(); // En revision
 dibujar(); // Invocando a la funcion dibujar()
 
