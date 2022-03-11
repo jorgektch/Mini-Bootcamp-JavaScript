@@ -60,17 +60,17 @@ ctx.fillStyle = "#003050"
 // Imagenes
 let fondo = new Image();
 let personaje = new Image();
-let corazon1 = new Image();
-let corazon2 = new Image();
-let corazon3 = new Image();
+let corazon = new Image();
 let reloj = new Image();
+let ganaste = new Image();
+let perdiste = new Image();
 
 fondo.src = "img/fondo.png";
 personaje.src = "img/personaje.png";
-corazon1.src = 'img/corazon.png';
-corazon2.src = 'img/corazon.png';
-corazon3.src = 'img/corazon.png';
+corazon.src = 'img/corazon.png';
 reloj.src = 'img/reloj.png';
+ganaste.src = 'img/ganaste.png';
+perdiste.src = 'img/perdiste.png';
 
 // Audio
 let sonido_fondo = new Audio();
@@ -113,6 +113,7 @@ let aceleracion_gravedad = 0.5;
 let salto_iniciado = false;
 
 function capturarMovimiento(){
+	sonido_fondo.play();
 	// keyCode = {37 left, 38 up, 39 rigth, 40 down}
 	if(event.keyCode == 37){
 		principal_veloc_x = -10; // Si se presiona el boton izq: la velocidad en x se vuelve negativa
@@ -209,10 +210,10 @@ function dibujarDatos(){
 	ctx.drawImage(fondo, fondo_x, fondo_y, fondo_w, fondo_h);
 	// Vidas
 	for(let i=0;i<vidas;i++){
-		ctx.drawImage(corazon1, 35+40*i, 33, 30, 27);
+		ctx.drawImage(corazon, 35+40*i, 33, 30, 27);
 	}
 	// Tiempo
-	tiempo = tiempo-0.125; // Actualizacion del tiempo
+	tiempo = tiempo-0.05; // Actualizacion del tiempo
 	ctx.drawImage(reloj, 420, 27, 30, 30);
 	ctx.fillText(Math.round(tiempo).toString()+" s", 460, 50);
 	// Puntos
@@ -250,25 +251,23 @@ function dibujar(){
 		moverPersonajeX(); // Movimiento en X
 		moverPersonajeY(); // Movimiento en Y
 		verificarColision(); // Verificar colision
-	}
-
-	dibujarDatos(); // Datos del juego
-	dibujarPersonajes(); // Personajes
 	
-	if(estado == 0){
+		dibujarDatos(); // Datos del juego
+		dibujarPersonajes(); // Personajes
+		
 		analizarEstadoDelJuego();
 		requestAnimationFrame(dibujar);
 	}else{
 		if(estado == 1){
-			alert("Ganaste");
-		}else{
-			alert("Perdiste");
+			ctx.drawImage(ganaste, 308, 204, 383, 91);
+			
+		}else if(estado == 2){
+			ctx.drawImage(perdiste, 320, 70, 360, 360);
 		}
 	}
 	
 }
 
 inicializarOtros();
-//sonido_fondo.play(); // En revision
 dibujar(); // Invocando a la funcion dibujar()
 
